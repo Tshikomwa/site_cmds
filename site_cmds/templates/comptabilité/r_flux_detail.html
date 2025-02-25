@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails du Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #495057;
+            font-family: 'Times New Roman', serif;
+            font-size: 16px; /* Normal font size */
+        }
+        h1, h2 {
+            color: #007bff;
+            font-family: 'Times New Roman', serif;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 18px; /* Adjusted font size for headings */
+        }
+        h5 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 18px; /* Adjusted font size for headings */
+        }
+        h6 {
+            color: #00050b;
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .table {
+            margin-bottom: 30px;
+        }
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+        }
+        .table tbody tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
+        .table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+        .table-striped tbody tr:nth-child(odd) {
+            background-color: #d9f7be;
+        }
+        .table-striped tbody tr:nth-child(even) {
+            background-color: #b5e3d8;
+        }
+        .table-warning tbody tr:nth-child(odd) {
+            background-color: #ffeb3b;
+        }
+        .table-warning tbody tr:nth-child(even) {
+            background-color: #ffec6e;
+        }
+        .table-danger tbody tr:nth-child(odd) {
+            background-color: #f8d7da;
+        }
+        .table-danger tbody tr:nth-child(even) {
+            background-color: #f5c6cb;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .section-3 {
+            margin-top: 50px;
+        }
+        @media print {
+            /* Styles spécifiques pour le PDF */
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <h6>TABLEAU DES OPERATIONS DETAILLEES DU <td>{{ form.date }}</td> </h6>
+        <!-- Bouton pour retourner à la page précédente -->
+        <div class="mb-4">
+            <a href="{% url 'generate_pdf_document' form_id=form.id %}" target="_blank" class="btn btn-primary">Afficher en PDF (j)</a>
+            <a href="{% url 'comptabilité/r_flux' %}" class="btn btn-secondary">Retour à la page précédente</a>
+        </div>
+        <h1>Flux d'entrée et de sortie des documents</h1>   
+        
+        <!-- Tableau des documents existants -->
+        <h5>Documents existants (Report à nouveau)</h5>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Cobalt Intersite</th>
+                    <th>Cobalt Transfert</th>
+                    <th>Cuivre Intersite</th>
+                    <th>Cuivre Transfert</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ form.cobalt_intersite_existant }}</td>
+                    <td>{{ form.cobalt_transfert_existant }}</td>
+                    <td>{{ form.cuivre_intersite_existant }}</td>
+                    <td>{{ form.cuivre_transfert_existant }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Tableau des documents reçus -->
+        <h5>Documents reçus (les entrées du jour)</h5>
+        <table class="table table-bordered table-warning">
+            <thead>
+                <tr>
+                    <th>Cobalt Intersite</th>
+                    <th>Cobalt Transfert</th>
+                    <th>Cuivre Intersite</th>
+                    <th>Cuivre Transfert</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ form.cobalt_intersite_recu }}</td>
+                    <td>{{ form.cobalt_transfert_recu }}</td>
+                    <td>{{ form.cuivre_intersite_recu }}</td>
+                    <td>{{ form.cuivre_transfert_recu }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Tableau des documents cumulés -->
+        <h5>Documents cumulés (existants + entrants)</h5>
+        <table class="table table-bordered table-danger">
+            <thead>
+                <tr>
+                    <th>Cobalt Intersite</th>
+                    <th>Cobalt Transfert</th>
+                    <th>Cuivre Intersite</th>
+                    <th>Cuivre Transfert</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ form.cumulative_documents.cobalt_intersite }}</td>
+                    <td>{{ form.cumulative_documents.cobalt_transfert }}</td>
+                    <td>{{ form.cumulative_documents.cuivre_intersite }}</td>
+                    <td>{{ form.cumulative_documents.cuivre_transfert }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Tableau des documents sorties -->
+        <h5>Sortie des documents</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Cobalt Intersite</th>
+                    <th>Cobalt Transfert</th>
+                    <th>Cuivre Intersite</th>
+                    <th>Cuivre Transfert</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ form.cobalt_intersite_sorti }}</td>
+                    <td>{{ form.cobalt_transfert_sorti }}</td>
+                    <td>{{ form.cuivre_intersite_sorti }}</td>
+                    <td>{{ form.cuivre_transfert_sorti }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Tableau des documents restants -->
+        <h5>Documents restants</h5>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Cobalt Intersite</th>
+                    <th>Cobalt Transfert</th>
+                    <th>Cuivre Intersite</th>
+                    <th>Cuivre Transfert</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ form.remaining_documents.cobalt_intersite }}</td>
+                    <td>{{ form.remaining_documents.cobalt_transfert }}</td>
+                    <td>{{ form.remaining_documents.cuivre_intersite }}</td>
+                    <td>{{ form.remaining_documents.cuivre_transfert }}</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </body>
+</html>

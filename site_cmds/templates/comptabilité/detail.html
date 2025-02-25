@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Détails des Décaissements</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #343a40;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .btn-custom {
+            border-radius: 30px;
+            font-weight: bold;
+        }
+        .table-responsive {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="text-center"><i class="fas fa-file-invoice-dollar"></i> Les décaissements du {{ decaissement.date }} effectués sur les entrées destinées à la trésorerie de Monsieur {{ decaissement.tresorier }}</h2>
+
+        <div class="d-flex justify-content-between mb-3">
+            <a href="{% url 'comptabilité/ajouter' %}" class="btn btn-success btn-custom">
+                <i class="fas fa-plus-circle"></i> Ajouter un Décaissement
+            </a>
+            <a href="{% url 'acces' %}" class="btn btn-secondary btn-custom">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+
+        <h2>Liste des Décaissements</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Référence</th>
+                    <th>Motif</th>
+                    <th>Montant USD</th>
+                    <th>Montant CDF</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for decaissement in decaissements %}
+                    <tr>
+                        <td>{{ decaissement.reference }}</td>
+                        <td>{{ decaissement.motif }}</td>
+                        <td>{{ decaissement.amount_usd }}</td>
+                        <td>{{ decaissement.amount_cdf }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Totaux</h2>
+        <p>Total USD : {{ total_usd }}</p>
+        <p>Total CDF : {{ total_cdf }}</p>
+    </div>
+{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

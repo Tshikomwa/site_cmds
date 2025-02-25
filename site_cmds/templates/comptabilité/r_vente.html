@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enregistrement des Entrées Financières</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            font-size: 16px;
+            background: linear-gradient(135deg, #f4f4f4, #e0e0e0);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+        h5 {
+            color: #00070e;
+            text-align: justify;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+        }
+        .container {
+            margin-top: 40px;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            overflow: hidden;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        .section {
+            background-color: #e9f5ff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid #007bff;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>RAPPORTS 'VENTE DES DOCUMENTS'</h1>
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Gestion des erreurs -->
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            <li>{{ field }} :
+                                {% for error in errors %}
+                                    <strong>{{ error }}</strong>
+                                {% endfor %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <!-- Messages de succès -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                        <ul>
+                            <li><strong>{{ message }}</strong></li>
+                        </ul>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="form-group mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" id="date" name="date" class="form-control" required>
+            </div>         
+
+            <!-- Entrées Financières -->
+            <section class="section">
+                <h5>Entrées Financières</h5>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        {{ form.doc_chinois_usd.label_tag }} 
+                        {{ form.doc_chinois_usd }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.div_chinois_cdf.label_tag }} 
+                        {{ form.div_chinois_cdf }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        {{ form.doc_congolais_usd.label_tag }} 
+                        {{ form.doc_congolais_usd }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.div_congolais_cdf.label_tag }} 
+                        {{ form.div_congolais_cdf }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.frais_de_depot_cdf.label_tag }} 
+                        {{ form.frais_de_depot_cdf }}
+                    </div>
+                </div>
+            </section>
+            <div class="form-actions text-center mt-4">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <a href="{% url 'acces' %}" class="btn btn-secondary">Retour</a>
+            </div>
+        </form>
+        <!-- Tableau des résumés journaliers -->
+        <h1 class="mt-5">RESUMES JOURNALIERS</h1>
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Document Chinois</th>
+                    <th>Document Congolais</th>
+                    <th>Dividende Chinois</th>
+                    <th>Dividende Congolais</th>
+                    <th>Frais de dépôt</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entrée in forms %}
+                <tr>
+                    <td>{{ entrée.date }}</td>
+                    <td>{{ entrée.doc_chinois_usd }}</td>
+                    <td>{{ entrée.div_chinois_cdf }}</td>
+                    <td>{{ entrée.doc_congolais_usd }}</td>
+                    <td>{{ entrée.div_congolais_cdf }}</td>
+                    <td>{{ entrée.frais_de_depot_cdf }}</td>
+                    <td>
+                        <a href="{% url 'comptabilité/r_vente_delete' entrée.pk %}" class="btn btn-danger btn-sm" 
+                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce document?');">
+                         <span style="color: rgb(241, 241, 238);">Supprimer</span>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById("date").addEventListener("input", function() {
+            if (!this.value) {
+                this.style.borderColor = "#dc3545";
+            } else {
+                this.style.borderColor = "#28a745";
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
